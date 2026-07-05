@@ -1,0 +1,236 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OptiSigns GraphQL API",
+    "version": "1.0",
+    "description": "OptiSigns is a cloud digital signage platform. Its public API is GraphQL-only, served from a single endpoint. Auth is an API key sent as 'Authorization: Bearer YOUR_KEY'. Device and Asset operations are confirmed against the official Node SDK; Playlist, Schedule, and Team operations are modeled."
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{apiKey}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Devices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all devices (screens)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"query { devices(first: 25) { edges { node { id deviceName uuid pairingCode status appVersion currentAssetId currentPlaylistId } } totalCount } }\"}"
+            }
+          },
+          "docs": "CONFIRMED (SDK listAllDevices). List devices paired to the account."
+        },
+        {
+          "info": {
+            "name": "Find device by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"query($name: String!) { deviceByName(deviceName: $name) { id deviceName uuid } }\",\"variables\":{\"name\":\"Lobby Screen\"}}"
+            }
+          },
+          "docs": "CONFIRMED (SDK findByDeviceName)."
+        },
+        {
+          "info": {
+            "name": "Update device",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"mutation($id: ID!, $input: DeviceUpdateInput!) { updateDevice(id: $id, input: $input) { id deviceName } }\",\"variables\":{\"id\":\"DEVICE_ID\",\"input\":{\"deviceName\":\"Lobby Screen A\"}}}"
+            }
+          },
+          "docs": "CONFIRMED (SDK updateDevice)."
+        },
+        {
+          "info": {
+            "name": "Reboot device",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"mutation($id: ID!) { rebootDevice(id: $id) { id status } }\",\"variables\":{\"id\":\"DEVICE_ID\"}}"
+            }
+          },
+          "docs": "CONFIRMED (SDK rebootDevice)."
+        },
+        {
+          "info": {
+            "name": "Push content to device",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"mutation($input: PushContentInput!) { pushContentToDevice(input: $input) { id currentAssetId } }\",\"variables\":{\"input\":{\"deviceId\":\"DEVICE_ID\",\"assetId\":\"ASSET_ID\"}}}"
+            }
+          },
+          "docs": "CONFIRMED (SDK pushContentToDevice)."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Assets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"query { assets(first: 25) { edges { node { id name type fileName fileType url } } totalCount } }\"}"
+            }
+          },
+          "docs": "CONFIRMED (SDK). List content assets."
+        },
+        {
+          "info": {
+            "name": "Find assets by file name",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"query($fn: String!) { assetsByFileName(fileName: $fn) { id name fileType } }\",\"variables\":{\"fn\":\"welcome.mp4\"}}"
+            }
+          },
+          "docs": "CONFIRMED. Filter assets by filename."
+        },
+        {
+          "info": {
+            "name": "Create website/app asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"mutation($input: WebsiteAppAssetInput!) { createWebsiteAppAsset(input: $input) { id name type webLink } }\",\"variables\":{\"input\":{\"name\":\"Company Site\",\"type\":\"WEBSITE\",\"webLink\":\"https://example.com\"}}}"
+            }
+          },
+          "docs": "CONFIRMED (SDK createWebsiteAppAsset)."
+        },
+        {
+          "info": {
+            "name": "Modify asset settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"mutation($id: ID!, $input: AssetSettingsInput!) { modifyAssetSettings(id: $id, input: $input) { id name } }\",\"variables\":{\"id\":\"ASSET_ID\",\"input\":{\"name\":\"Company Site (Prod)\"}}}"
+            }
+          },
+          "docs": "CONFIRMED (SDK modifyAssetSettings)."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Playlists (MODELED)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List playlists (modeled)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"query { playlists(first: 25) { edges { node { id name totalDurationSeconds } } } }\"}"
+            }
+          },
+          "docs": "MODELED. Documented resource type; verify exact fields via schema introspection."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Schedules (MODELED)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List schedules (modeled)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"query { schedules(first: 25) { edges { node { id name recurrence startDate endDate } } } }\"}"
+            }
+          },
+          "docs": "MODELED. Documented resource type; verify exact fields via schema introspection."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Teams (MODELED)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List teams (modeled)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://graphql-gateway.optisigns.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\"query\":\"query { teams(first: 25) { edges { node { id name deviceCount assetCount } } } }\"}"
+            }
+          },
+          "docs": "MODELED. Documented resource type; verify exact fields via schema introspection."
+        }
+      ]
+    }
+  ]
+}

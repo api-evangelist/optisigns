@@ -1,0 +1,117 @@
+aid: optisigns
+name: OptiSigns
+review:
+  question: Does OptiSigns expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-05'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. OptiSigns' public developer surface is a
+    single GraphQL endpoint (https://graphql-gateway.optisigns.com/graphql)
+    served over HTTPS in a request/response model. No GraphQL subscription
+    transport, Server-Sent Events stream, or WebSocket (ws:// or wss://) endpoint
+    is documented in the OptiSigns Developer Hub, support articles, official SDKs,
+    or API cookbook. Real-time device behavior (content pushes, reboots) is driven
+    server-side by the OptiSigns platform after a mutation; there is no documented
+    client-facing push transport to model.
+findings:
+  summary: |
+    OptiSigns does not publish a documented public WebSocket API. OptiSigns is a
+    cloud digital signage platform. Its public API is GraphQL-only, served from a
+    single endpoint at https://graphql-gateway.optisigns.com/graphql and
+    authenticated with an API key supplied as an HTTP header
+    (Authorization: Bearer YOUR_KEY). The endpoint doubles as an interactive
+    GraphQL IDE for exploring the schema. All documented operations are
+    request/response Queries (reads) and Mutations (writes). No realtime,
+    bidirectional, or streaming WebSocket endpoint - and no documented GraphQL
+    Subscription operations - are described in public materials as of the review
+    date.
+  accessModel: |
+    The API is a paid, self-serve capability. GraphQL API access is included on
+    the Pro Plus plan ($15/screen/month, $13.50 annually) and higher, including
+    Enterprise ($45/screen/month, $40.50 annually, minimum 25 screens). Free,
+    Standard, and Pro tiers do not include API access. Some third-party pricing
+    summaries describe API access as Enterprise-only; OptiSigns' own pricing page
+    lists it from Pro Plus up. Not open source; the API server is proprietary, but
+    official open-source client SDKs (TypeScript/JavaScript and Python) and an API
+    cookbook are published on GitHub.
+  transports:
+    - protocol: GraphQL
+      scheme: https
+      baseURL: https://graphql-gateway.optisigns.com/graphql
+      documented: true
+      note: Single GraphQL endpoint, request/response. Also serves an interactive GraphQL IDE. Bearer API-key auth.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in the Developer Hub, support articles, SDKs, or cookbook.
+    - protocol: GraphQL Subscriptions
+      scheme: wss
+      documented: false
+      note: No public GraphQL Subscription operations are documented on the OptiSigns gateway.
+  endpointsConfirmed:
+    note: |
+      OptiSigns exposes one GraphQL URL rather than per-resource REST paths. The
+      operations below are confirmed against the official OptiSigns Node SDK
+      (github.com/optisigns/optisigns-node), which wraps the GraphQL API.
+    devices:
+      - listAllDevices
+      - findByDeviceName
+      - getDeviceById
+      - createDevice
+      - updateDevice
+      - deleteDeviceById
+      - rebootDevice
+      - pushContentToDevice
+    assets:
+      - uploadFileAsset
+      - createWebsiteAppAsset
+      - modifyAssetSettings
+      - deleteAssetById
+  endpointsModeled:
+    note: |
+      Playlists, Schedules, and Teams are documented OptiSigns resource types
+      referenced by the API cookbook, but their exact GraphQL query/mutation field
+      names are not enumerated in public docs. The corresponding operations in
+      graphql/optisigns-schema.graphql are honestly modeled and marked as MODELED.
+    playlists:
+      - playlists (MODELED)
+      - createPlaylist (MODELED)
+      - updatePlaylist (MODELED)
+      - deletePlaylist (MODELED)
+    schedules:
+      - schedules (MODELED)
+      - createSchedule (MODELED)
+      - updateSchedule (MODELED)
+      - deleteSchedule (MODELED)
+    teams:
+      - teams (MODELED)
+      - createTeam (MODELED)
+      - updateTeam (MODELED)
+sources:
+  - url: https://docs.optisigns.com/quickstart
+    type: Documentation
+    note: GraphQL endpoint, API-key auth, and interactive IDE. Request/response only. No WebSocket.
+  - url: https://support.optisigns.com/hc/en-us/articles/4414563797139-Generate-Manage-OptiSigns-API-Key
+    type: Documentation
+    note: Authorization Bearer header format for API keys.
+  - url: https://support.optisigns.com/hc/en-us/sections/4414558217235-OptiSigns-API
+    type: APIReference
+    note: API support section. GraphQL Query/Mutation model.
+  - url: https://github.com/optisigns/optisigns-node
+    type: SourceCode
+    note: Official Node SDK. Confirms device and asset operation names.
+  - url: https://github.com/optisigns/optisigns-api-cookbook
+    type: SourceCode
+    note: Cookbook covering Devices, Assets, Playlists, Schedules, and other resources.
+  - url: https://www.optisigns.com/pricing
+    type: Plans
+    note: Per-screen pricing; GraphQL API access from Pro Plus up.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or GraphQL Subscription surface exists. OptiSigns' public API is
+    request/response GraphQL over HTTPS. No AsyncAPI document was created because
+    there is no documented server-push transport on the OptiSigns API to model.

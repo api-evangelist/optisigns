@@ -1,0 +1,246 @@
+{
+  "info": {
+    "name": "OptiSigns GraphQL API",
+    "description": "OptiSigns digital signage GraphQL API. Single endpoint at https://graphql-gateway.optisigns.com/graphql. Set the apiKey variable to your OptiSigns API key (Authorization: Bearer). Device and Asset operations are confirmed against the official Node SDK; Playlist, Schedule, and Team operations are modeled.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{apiKey}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://graphql-gateway.optisigns.com/graphql"
+    },
+    {
+      "key": "apiKey",
+      "value": "YOUR_KEY_HERE"
+    }
+  ],
+  "item": [
+    {
+      "name": "Devices",
+      "item": [
+        {
+          "name": "List all devices (screens)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query { devices(first: 25) { edges { node { id deviceName uuid pairingCode status appVersion } } totalCount } }\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK listAllDevices)."
+          }
+        },
+        {
+          "name": "Find device by name",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query($name: String!) { deviceByName(deviceName: $name) { id deviceName uuid } }\",\n  \"variables\": { \"name\": \"Lobby Screen\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK findByDeviceName)."
+          }
+        },
+        {
+          "name": "Update device",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($id: ID!, $input: DeviceUpdateInput!) { updateDevice(id: $id, input: $input) { id deviceName } }\",\n  \"variables\": { \"id\": \"DEVICE_ID\", \"input\": { \"deviceName\": \"Lobby Screen A\" } }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK updateDevice)."
+          }
+        },
+        {
+          "name": "Reboot device",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($id: ID!) { rebootDevice(id: $id) { id status } }\",\n  \"variables\": { \"id\": \"DEVICE_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK rebootDevice)."
+          }
+        },
+        {
+          "name": "Push content to device",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($input: PushContentInput!) { pushContentToDevice(input: $input) { id currentAssetId } }\",\n  \"variables\": { \"input\": { \"deviceId\": \"DEVICE_ID\", \"assetId\": \"ASSET_ID\" } }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK pushContentToDevice)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assets",
+      "item": [
+        {
+          "name": "List assets",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query { assets(first: 25) { edges { node { id name type fileName fileType url } } totalCount } }\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK)."
+          }
+        },
+        {
+          "name": "Find assets by file name",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query($fn: String!) { assetsByFileName(fileName: $fn) { id name fileType } }\",\n  \"variables\": { \"fn\": \"welcome.mp4\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED."
+          }
+        },
+        {
+          "name": "Create website/app asset",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($input: WebsiteAppAssetInput!) { createWebsiteAppAsset(input: $input) { id name type webLink } }\",\n  \"variables\": { \"input\": { \"name\": \"Company Site\", \"type\": \"WEBSITE\", \"webLink\": \"https://example.com\" } }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK createWebsiteAppAsset)."
+          }
+        },
+        {
+          "name": "Modify asset settings",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($id: ID!, $input: AssetSettingsInput!) { modifyAssetSettings(id: $id, input: $input) { id name } }\",\n  \"variables\": { \"id\": \"ASSET_ID\", \"input\": { \"name\": \"Company Site (Prod)\" } }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "CONFIRMED (SDK modifyAssetSettings)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Playlists (MODELED)",
+      "item": [
+        {
+          "name": "List playlists (modeled)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query { playlists(first: 25) { edges { node { id name totalDurationSeconds } } } }\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "MODELED. Verify exact fields via schema introspection."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Schedules (MODELED)",
+      "item": [
+        {
+          "name": "List schedules (modeled)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query { schedules(first: 25) { edges { node { id name recurrence startDate endDate } } } }\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "MODELED. Verify exact fields via schema introspection."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Teams (MODELED)",
+      "item": [
+        {
+          "name": "List teams (modeled)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query { teams(first: 25) { edges { node { id name deviceCount assetCount } } } }\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "MODELED. Verify exact fields via schema introspection."
+          }
+        }
+      ]
+    }
+  ]
+}

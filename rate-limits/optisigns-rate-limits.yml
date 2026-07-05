@@ -1,0 +1,60 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: OptiSigns
+providerId: optisigns
+created: '2026-07-05'
+modified: '2026-07-05'
+reconciled: false
+tags:
+- Digital Signage
+- Screens
+- GraphQL
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  OptiSigns serves a single GraphQL endpoint at
+  https://graphql-gateway.optisigns.com/graphql, authenticated per API key.
+  OptiSigns does not publish specific numeric rate limits (requests per
+  minute/second or query complexity budgets) in its public developer docs. The
+  developer materials note error handling and pagination as first-class concerns,
+  which implies server-side throttling and paged result sets, but exact limits are
+  not documented. Treat limits as unconfirmed and design clients defensively.
+notes: >-
+  No public numeric rate-limit values were found in the OptiSigns Developer Hub,
+  support articles, SDK, or cookbook as of the review date. Reconcile against any
+  future published limits or against observed 429/throttle responses from the
+  GraphQL gateway.
+sources:
+- https://docs.optisigns.com/quickstart
+- https://github.com/optisigns/optisigns-node
+- https://github.com/optisigns/optisigns-api-cookbook
+responseCodes:
+  throttled: 429
+limits:
+- name: GraphQL Requests
+  scope: api_key
+  metric: requests
+  limit: see provider documentation
+  notes: OptiSigns does not publish a numeric request rate limit; assume server-side throttling per API key.
+- name: Query Complexity
+  scope: api_key
+  metric: query_cost
+  limit: see provider documentation
+  notes: No published GraphQL query-complexity or depth budget; large queries should use pagination.
+- name: Result Pagination
+  scope: request
+  metric: items
+  limit: paginated
+  notes: The docs describe pagination as a first-class concern; list queries return paged connections rather than unbounded sets.
+policies:
+- name: Pagination
+  description: Use cursor/page arguments on list queries; do not request unbounded result sets.
+- name: Error Handling
+  description: Handle GraphQL errors and HTTP 429 responses; implement exponential backoff with jitter on throttling.
+- name: Plan Entitlement
+  description: API access itself is gated by plan (Pro Plus and higher); a 401/403 typically indicates a missing entitlement or invalid key rather than a rate limit.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

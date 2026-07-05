@@ -1,0 +1,75 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: OptiSigns
+providerId: optisigns
+created: '2026-07-05'
+modified: '2026-07-05'
+reconciled: true
+tags:
+- Digital Signage
+- Screens
+- GraphQL
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of OptiSigns spend. OptiSigns bills per screen per month (or per
+  screen per month billed annually), not per API call. The billable unit is the
+  active screen; the GraphQL API is an entitlement unlocked by plan (Pro Plus and
+  higher) rather than a metered, usage-priced service. Cost scales with the number
+  of screens deployed and the plan tier attached to them. Optimization is about
+  right-sizing plan tier per screen, consolidating screens onto the lowest tier
+  that still carries required features (API access requires Pro Plus or higher),
+  and taking annual billing discounts.
+notes: >-
+  Per-screen prices captured from the OptiSigns pricing page; verify current
+  rates and API entitlement during reconciliation. There is no per-API-call charge
+  documented - API usage is included with qualifying plans.
+sources:
+- https://www.optisigns.com/pricing
+- https://docs.optisigns.com/quickstart
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: OptiSigns
+serviceCategory: Digital Signage
+billingModel:
+  pricingCategory: Subscription
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+meters:
+- name: active_screens
+  description: Screens (devices) active on the account, billed per screen per month by plan tier.
+  unit: screens
+  aggregation: sum
+  dimensions:
+  - account
+  - plan
+  - team
+- name: plan_tier
+  description: Plan tier attached to screens; determines per-screen price and whether GraphQL API access is included.
+  unit: tier
+  aggregation: max
+  dimensions:
+  - account
+  - plan
+principles:
+- name: Visibility
+  description: Track active screen count and plan tier per team/location; the screen is the unit that drives cost.
+- name: Allocation
+  description: Use OptiSigns Teams (sub-accounts) to map screens to internal cost centers and locations.
+- name: Optimization
+  description: Right-size each screen to the lowest plan that carries required features; only put screens that truly need programmatic control on Pro Plus or higher; take annual-billing discounts; retire idle/unpaired screens.
+- name: Accountability
+  description: Assign owners per team; review active-screen counts and plan mix monthly against budget.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

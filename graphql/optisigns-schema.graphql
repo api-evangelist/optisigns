@@ -1,0 +1,418 @@
+"""
+OptiSigns GraphQL Schema
+Modeled from the OptiSigns GraphQL API (https://graphql-gateway.optisigns.com/graphql),
+the official Node SDK (github.com/optisigns/optisigns-node), and the API cookbook
+(github.com/optisigns/optisigns-api-cookbook).
+
+Device and Asset operations are CONFIRMED against the official SDK. Playlist,
+Schedule, and Team operations are documented resource types whose exact GraphQL
+field names are not published; those are marked MODELED and should be verified
+against live schema introspection at the GraphQL IDE before use.
+
+Auth: Authorization: Bearer YOUR_KEY_HERE
+"""
+
+# ─────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────
+
+scalar JSON
+scalar DateTime
+scalar Upload
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  UNPAIRED
+  ERROR
+}
+
+enum DeviceOrientation {
+  LANDSCAPE
+  PORTRAIT
+  LANDSCAPE_FLIPPED
+  PORTRAIT_FLIPPED
+}
+
+enum AssetType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+  WEBSITE
+  APP
+  PLAYLIST
+  STREAM
+  SLIDESHOW
+}
+
+enum ScheduleRecurrence {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+  CUSTOM
+}
+
+# ─────────────────────────────────────────────
+# Core Entity Types
+# ─────────────────────────────────────────────
+
+"A device is a paired screen/display running the OptiSigns player."
+type Device {
+  id: ID!
+  deviceName: String!
+  uuid: String
+  pairingCode: String
+  status: DeviceStatus
+  orientation: DeviceOrientation
+  appVersion: String
+  currentAssetId: ID
+  currentPlaylistId: ID
+  currentScheduleId: ID
+  teamId: ID
+  tags: [String!]
+  lastSeenAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type DeviceEdge {
+  cursor: String
+  node: Device!
+}
+
+type DeviceConnection {
+  edges: [DeviceEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+"An asset is a piece of content that can be shown on a device."
+type Asset {
+  id: ID!
+  name: String!
+  type: AssetType!
+  fileName: String
+  fileType: String
+  url: String
+  webLink: String
+  fileSize: Int
+  teamId: ID
+  tags: [String!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type AssetEdge {
+  cursor: String
+  node: Asset!
+}
+
+type AssetConnection {
+  edges: [AssetEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+"MODELED: A playlist is an ordered sequence of assets with per-item durations."
+type Playlist {
+  id: ID!
+  name: String!
+  items: [PlaylistItem!]!
+  totalDurationSeconds: Int
+  teamId: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+"MODELED"
+type PlaylistItem {
+  assetId: ID!
+  order: Int!
+  durationSeconds: Int
+}
+
+type PlaylistConnection {
+  edges: [PlaylistEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+type PlaylistEdge {
+  cursor: String
+  node: Playlist!
+}
+
+"MODELED: A schedule controls when content plays on which devices."
+type Schedule {
+  id: ID!
+  name: String!
+  assetId: ID
+  playlistId: ID
+  deviceIds: [ID!]
+  startDate: DateTime
+  endDate: DateTime
+  startTime: String
+  endTime: String
+  recurrence: ScheduleRecurrence
+  teamId: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type ScheduleConnection {
+  edges: [ScheduleEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+type ScheduleEdge {
+  cursor: String
+  node: Schedule!
+}
+
+"MODELED: A team is a sub-account grouping devices and assets."
+type Team {
+  id: ID!
+  name: String!
+  deviceCount: Int
+  assetCount: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type TeamConnection {
+  edges: [TeamEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+type TeamEdge {
+  cursor: String
+  node: Team!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type DeleteResult {
+  id: ID!
+  deleted: Boolean!
+}
+
+# ─────────────────────────────────────────────
+# Input Types
+# ─────────────────────────────────────────────
+
+input DeviceCreateInput {
+  deviceName: String!
+  pairingCode: String
+  orientation: DeviceOrientation
+  teamId: ID
+  tags: [String!]
+}
+
+input DeviceUpdateInput {
+  deviceName: String
+  orientation: DeviceOrientation
+  teamId: ID
+  tags: [String!]
+}
+
+input PushContentInput {
+  deviceId: ID!
+  assetId: ID
+  playlistId: ID
+}
+
+input FileAssetUploadInput {
+  file: Upload!
+  name: String
+  teamId: ID
+  tags: [String!]
+}
+
+input WebsiteAppAssetInput {
+  name: String!
+  type: AssetType!
+  webLink: String
+  config: JSON
+  teamId: ID
+}
+
+input AssetSettingsInput {
+  name: String
+  tags: [String!]
+  config: JSON
+}
+
+# MODELED inputs
+input PlaylistCreateInput {
+  name: String!
+  items: [PlaylistItemInput!]!
+  teamId: ID
+}
+
+input PlaylistItemInput {
+  assetId: ID!
+  order: Int!
+  durationSeconds: Int
+}
+
+input PlaylistUpdateInput {
+  name: String
+  items: [PlaylistItemInput!]
+}
+
+input ScheduleCreateInput {
+  name: String!
+  assetId: ID
+  playlistId: ID
+  deviceIds: [ID!]
+  startDate: DateTime
+  endDate: DateTime
+  startTime: String
+  endTime: String
+  recurrence: ScheduleRecurrence
+  teamId: ID
+}
+
+input ScheduleUpdateInput {
+  name: String
+  assetId: ID
+  playlistId: ID
+  deviceIds: [ID!]
+  startDate: DateTime
+  endDate: DateTime
+  startTime: String
+  endTime: String
+  recurrence: ScheduleRecurrence
+}
+
+input TeamCreateInput {
+  name: String!
+}
+
+input TeamUpdateInput {
+  name: String!
+}
+
+# ─────────────────────────────────────────────
+# Query Root
+# ─────────────────────────────────────────────
+
+type Query {
+  # Devices - CONFIRMED (SDK: listAllDevices, findByDeviceName, getDeviceById)
+  "List all devices (screens) paired to the account."
+  devices(first: Int, after: String, teamId: ID): DeviceConnection!
+
+  "Find a device by its name."
+  deviceByName(deviceName: String!): Device
+
+  "Retrieve a specific device by ID."
+  device(id: ID!): Device
+
+  # Assets - CONFIRMED (SDK: fetch assets, filter by filename)
+  "List content assets."
+  assets(first: Int, after: String, type: AssetType, teamId: ID): AssetConnection!
+
+  "Find assets by filename."
+  assetsByFileName(fileName: String!): [Asset!]!
+
+  "Retrieve a specific asset by ID."
+  asset(id: ID!): Asset
+
+  # Playlists - MODELED
+  "MODELED: List playlists."
+  playlists(first: Int, after: String, teamId: ID): PlaylistConnection!
+
+  "MODELED: Retrieve a specific playlist by ID."
+  playlist(id: ID!): Playlist
+
+  # Schedules - MODELED
+  "MODELED: List schedules."
+  schedules(first: Int, after: String, teamId: ID): ScheduleConnection!
+
+  "MODELED: Retrieve a specific schedule by ID."
+  schedule(id: ID!): Schedule
+
+  # Teams - MODELED
+  "MODELED: List teams (sub-accounts)."
+  teams(first: Int, after: String): TeamConnection!
+
+  "MODELED: Retrieve a specific team by ID."
+  team(id: ID!): Team
+}
+
+# ─────────────────────────────────────────────
+# Mutation Root
+# ─────────────────────────────────────────────
+
+type Mutation {
+  # Devices - CONFIRMED (SDK: createDevice, updateDevice, deleteDeviceById, rebootDevice, pushContentToDevice)
+  "Create (pair) a new device."
+  createDevice(input: DeviceCreateInput!): Device!
+
+  "Update a device's settings."
+  updateDevice(id: ID!, input: DeviceUpdateInput!): Device!
+
+  "Delete a device by ID."
+  deleteDevice(id: ID!): DeleteResult!
+
+  "Reboot a device."
+  rebootDevice(id: ID!): Device!
+
+  "Push an asset or playlist to a device."
+  pushContentToDevice(input: PushContentInput!): Device!
+
+  # Assets - CONFIRMED (SDK: uploadFileAsset, createWebsiteAppAsset, modifyAssetSettings, deleteAssetById)
+  "Upload a file asset (image, video, document)."
+  uploadFileAsset(input: FileAssetUploadInput!): Asset!
+
+  "Create a website or app asset."
+  createWebsiteAppAsset(input: WebsiteAppAssetInput!): Asset!
+
+  "Modify an asset's settings."
+  modifyAssetSettings(id: ID!, input: AssetSettingsInput!): Asset!
+
+  "Delete an asset by ID."
+  deleteAsset(id: ID!): DeleteResult!
+
+  # Playlists - MODELED
+  "MODELED: Create a playlist."
+  createPlaylist(input: PlaylistCreateInput!): Playlist!
+
+  "MODELED: Update a playlist."
+  updatePlaylist(id: ID!, input: PlaylistUpdateInput!): Playlist!
+
+  "MODELED: Delete a playlist."
+  deletePlaylist(id: ID!): DeleteResult!
+
+  # Schedules - MODELED
+  "MODELED: Create a schedule."
+  createSchedule(input: ScheduleCreateInput!): Schedule!
+
+  "MODELED: Update a schedule."
+  updateSchedule(id: ID!, input: ScheduleUpdateInput!): Schedule!
+
+  "MODELED: Delete a schedule."
+  deleteSchedule(id: ID!): DeleteResult!
+
+  # Teams - MODELED
+  "MODELED: Create a team."
+  createTeam(input: TeamCreateInput!): Team!
+
+  "MODELED: Update a team."
+  updateTeam(id: ID!, input: TeamUpdateInput!): Team!
+
+  "MODELED: Delete a team."
+  deleteTeam(id: ID!): DeleteResult!
+}

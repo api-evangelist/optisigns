@@ -1,0 +1,157 @@
+aid: optisigns
+url: https://raw.githubusercontent.com/api-evangelist/optisigns/refs/heads/main/apis.yml
+name: OptiSigns
+kind: company
+description: OptiSigns is a cloud digital signage platform that turns any TV or
+  display into a digital sign using low-cost media players (Android, Amazon Fire
+  TV, Raspberry Pi, ProDVX, and others). Screens, media assets, playlists, and
+  schedules are managed centrally from the OptiSigns dashboard. Developers manage
+  the same resources programmatically through the OptiSigns GraphQL API, which is
+  served from a single endpoint at https://graphql-gateway.optisigns.com/graphql
+  and authenticated with a Bearer API key. API access is a paid capability
+  available on the Pro Plus plan and higher; the API covers devices (screens),
+  assets (content), playlists, schedules, and team management. Official
+  TypeScript/JavaScript and Python SDKs plus an API cookbook are published on
+  GitHub.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Digital Signage
+- Screens
+- Content Management
+- GraphQL
+- Displays
+- Playlists
+created: '2026-07-05'
+modified: '2026-07-05'
+specificationVersion: '0.19'
+apis:
+- aid: optisigns:optisigns-devices-api
+  name: OptiSigns Devices API
+  tags:
+  - Devices
+  - Screens
+  - Displays
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.optisigns.com/quickstart
+  baseURL: https://graphql-gateway.optisigns.com/graphql
+  properties:
+  - url: https://docs.optisigns.com/quickstart
+    type: Documentation
+  - url: https://support.optisigns.com/hc/en-us/sections/4414558217235-OptiSigns-API
+    type: APIReference
+  - url: graphql/optisigns-schema.graphql
+    type: GraphQL
+  - url: graphql/optisigns-graphql.md
+    type: Documentation
+  - url: collections/optisigns.opencollection.json
+    type: PostmanCollection
+  description: Query and manage the devices (screens) paired to an OptiSigns
+    account. List devices, look them up by name or ID, create and update device
+    settings, reboot a device, push content, and delete devices. Confirmed against
+    the official OptiSigns Node SDK methods listAllDevices, findByDeviceName,
+    getDeviceById, createDevice, updateDevice, deleteDeviceById, rebootDevice, and
+    pushContentToDevice.
+- aid: optisigns:optisigns-assets-api
+  name: OptiSigns Assets API
+  tags:
+  - Assets
+  - Media
+  - Content
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.optisigns.com/quickstart
+  baseURL: https://graphql-gateway.optisigns.com/graphql
+  properties:
+  - url: https://docs.optisigns.com/quickstart
+    type: Documentation
+  - url: https://github.com/optisigns/optisigns-api-cookbook
+    type: SourceCode
+  - url: graphql/optisigns-schema.graphql
+    type: GraphQL
+  - url: collections/optisigns.opencollection.json
+    type: PostmanCollection
+  description: Manage the content assets displayed on screens - upload file assets
+    (images, video, documents), create website and app assets, modify asset
+    settings, list and fetch assets by filename, and delete assets. Confirmed
+    against the official OptiSigns Node SDK methods uploadFileAsset,
+    createWebsiteAppAsset, modifyAssetSettings, and deleteAssetById.
+- aid: optisigns:optisigns-playlists-api
+  name: OptiSigns Playlists API
+  tags:
+  - Playlists
+  - Content Sequencing
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.optisigns.com/quickstart
+  baseURL: https://graphql-gateway.optisigns.com/graphql
+  properties:
+  - url: https://docs.optisigns.com/quickstart
+    type: Documentation
+  - url: https://github.com/optisigns/optisigns-api-cookbook
+    type: SourceCode
+  - url: graphql/optisigns-schema.graphql
+    type: GraphQL
+  description: Create and manage playlists - ordered sequences of assets with
+    per-item durations - and assign them to devices. Playlists are a documented
+    OptiSigns resource type covered by the API cookbook; the specific GraphQL
+    operations are honestly modeled in the schema and flagged as modeled where the
+    exact field names are not confirmed in public docs.
+- aid: optisigns:optisigns-schedules-api
+  name: OptiSigns Schedules API
+  tags:
+  - Schedules
+  - Scheduling
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.optisigns.com/quickstart
+  baseURL: https://graphql-gateway.optisigns.com/graphql
+  properties:
+  - url: https://docs.optisigns.com/quickstart
+    type: Documentation
+  - url: https://github.com/optisigns/optisigns-api-cookbook
+    type: SourceCode
+  - url: graphql/optisigns-schema.graphql
+    type: GraphQL
+  description: Create and manage schedules that control when assets and playlists
+    play on which devices across dates, times, and recurrence. Schedules are a
+    documented OptiSigns resource type covered by the API cookbook; the specific
+    GraphQL operations are honestly modeled in the schema and flagged as modeled
+    where the exact field names are not confirmed in public docs.
+- aid: optisigns:optisigns-teams-api
+  name: OptiSigns Teams API
+  tags:
+  - Teams
+  - Organization
+  - Access
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.optisigns.com/quickstart
+  baseURL: https://graphql-gateway.optisigns.com/graphql
+  properties:
+  - url: https://docs.optisigns.com/quickstart
+    type: Documentation
+  - url: https://github.com/optisigns/optisigns-api-cookbook
+    type: SourceCode
+  - url: graphql/optisigns-schema.graphql
+    type: GraphQL
+  description: Organize devices and assets into teams (sub-accounts) for
+    multi-location and multi-tenant management. Teams are a documented OptiSigns
+    resource type referenced by the API cookbook; the specific GraphQL operations
+    are honestly modeled in the schema and flagged as modeled where the exact
+    field names are not confirmed in public docs.
+common:
+- type: GitHubOrganization
+  url: https://github.com/optisigns
+- type: LinkedIn
+  url: https://www.linkedin.com/company/optisigns
+- type: Website
+  url: https://www.optisigns.com
+- type: Documentation
+  url: https://docs.optisigns.com
+- type: Plans
+  url: plans/optisigns-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/optisigns-rate-limits.yml
+- type: FinOps
+  url: finops/optisigns-finops.yml
+- type: SDK
+  url: https://github.com/optisigns/optisigns-node
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

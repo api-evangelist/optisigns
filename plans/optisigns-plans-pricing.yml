@@ -1,0 +1,202 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: OptiSigns
+providerId: optisigns
+created: '2026-07-05'
+modified: '2026-07-05'
+reconciled: true
+tags:
+- Digital Signage
+- Screens
+- Content Management
+- GraphQL
+- Plans
+description: >-
+  OptiSigns prices its digital signage platform per screen per month, with
+  discounts for annual billing. Plans progress from a free tier (up to 3 screens)
+  through Standard, Pro, Pro Plus, Engage, and Enterprise. GraphQL API access is a
+  paid capability included on the Pro Plus plan and higher (Pro Plus, Engage,
+  Enterprise); Free, Standard, and Pro do not include API access. Enterprise
+  requires a minimum of 25 screens. Per-screen pricing is not multiplied by API
+  calls - the API is entitlement-gated by plan, and screens are the billable unit.
+notes: >-
+  Per-screen prices captured from the OptiSigns pricing page. Some third-party
+  summaries describe API access as Enterprise-only; OptiSigns' own pricing page
+  lists GraphQL API access from Pro Plus up. Verify the current entitlement for a
+  given account on the pricing page during reconciliation.
+sources:
+- https://www.optisigns.com/pricing
+- https://docs.optisigns.com/quickstart
+- https://support.optisigns.com/hc/en-us/sections/4414558217235-OptiSigns-API
+plans:
+- id: optisigns-free
+  name: Free
+  type: free
+  description: >-
+    Free tier limited to a small number of screens. No GraphQL API access.
+  entries:
+  - label: Screens (Free)
+    name: screens_free
+    type: flat
+    metric: screens
+    limit: 3
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 per screen
+    userMultiplied: true
+  elements:
+  - name: Up to 3 screens
+  - name: Basic content and templates
+- id: optisigns-standard
+  name: Standard
+  type: paid
+  description: >-
+    Core per-screen digital signage. No GraphQL API access.
+  entries:
+  - label: Screen (Standard, monthly)
+    name: screen_standard_monthly
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $10 per screen per month
+    userMultiplied: true
+  - label: Screen (Standard, annual)
+    name: screen_standard_annual
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $9 per screen per month billed annually
+    userMultiplied: true
+  elements:
+  - name: Unlimited screens billed per screen
+  - name: Content scheduling and playlists
+- id: optisigns-pro
+  name: Pro
+  type: paid
+  description: >-
+    Advanced signage features. No GraphQL API access.
+  entries:
+  - label: Screen (Pro, monthly)
+    name: screen_pro_monthly
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $12.50 per screen per month
+    userMultiplied: true
+  - label: Screen (Pro, annual)
+    name: screen_pro_annual
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $11.25 per screen per month billed annually
+    userMultiplied: true
+  elements:
+  - name: Advanced apps and integrations
+- id: optisigns-pro-plus
+  name: Pro Plus
+  type: paid
+  description: >-
+    Entry plan that includes GraphQL API access, plus OptiSync dynamic data
+    integrations and API-to-screen automation.
+  entries:
+  - label: Screen (Pro Plus, monthly)
+    name: screen_pro_plus_monthly
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $15 per screen per month
+    userMultiplied: true
+  - label: Screen (Pro Plus, annual)
+    name: screen_pro_plus_annual
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $13.50 per screen per month billed annually
+    userMultiplied: true
+  elements:
+  - name: GraphQL API access
+  - name: OptiSync dynamic data
+  - name: API-to-screen automation
+- id: optisigns-engage
+  name: Engage
+  type: paid
+  description: >-
+    Interactive and engagement-focused signage. Includes API access.
+  entries:
+  - label: Screen (Engage, monthly)
+    name: screen_engage_monthly
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $30 per screen per month
+    userMultiplied: true
+  - label: Screen (Engage, annual)
+    name: screen_engage_annual
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $27 per screen per month billed annually
+    userMultiplied: true
+  elements:
+  - name: GraphQL API access
+  - name: Interactive and engagement features
+- id: optisigns-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Enterprise plan with advanced integrations, SSO, and dedicated support.
+    Includes GraphQL API access. Minimum 25 screens.
+  entries:
+  - label: Screen (Enterprise, monthly)
+    name: screen_enterprise_monthly
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $45 per screen per month, minimum 25 screens
+    userMultiplied: true
+  - label: Screen (Enterprise, annual)
+    name: screen_enterprise_annual
+    type: flat
+    metric: screens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $40.50 per screen per month billed annually, minimum 25 screens
+    userMultiplied: true
+  elements:
+  - name: GraphQL API access with advanced integrations
+  - name: SSO and enterprise security
+  - name: Dedicated support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
