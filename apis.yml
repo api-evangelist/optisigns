@@ -136,6 +136,12 @@ apis:
     are honestly modeled in the schema and flagged as modeled where the exact
     field names are not confirmed in public docs.
 common:
+- type: TrustCenter
+  url: security/optisigns-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/optisigns-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/optisigns-domain-security.yml
 - type: GitHubOrganization
   url: https://github.com/optisigns
 - type: LinkedIn

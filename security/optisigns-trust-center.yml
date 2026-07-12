@@ -1,0 +1,12 @@
+generated: '2026-07-11'
+method: searched
+probe: true
+source: https://trust.optisigns.com/
+url: https://trust.optisigns.com/
+certifications:
+- SOC 2
+evidence:
+- source: https://trust.optisigns.com/
+  keywords:
+  - soc 2
+  - trust center
