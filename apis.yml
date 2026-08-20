@@ -129,6 +129,10 @@ apis:
 - aid: optisigns:optisigns-teams-api
   name: OptiSigns Teams API
   tags:
+  - Team
+  - Organization
+  - Access
+  tags_raw:
   - Teams
   - Organization
   - Access
