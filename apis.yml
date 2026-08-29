@@ -13,6 +13,17 @@ description: OptiSigns is a cloud digital signage platform that turns any TV or
   assets (content), playlists, schedules, and team management. Official
   TypeScript/JavaScript and Python SDKs plus an API cookbook are published on
   GitHub.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown
