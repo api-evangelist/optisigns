@@ -120,6 +120,9 @@ apis:
 - aid: optisigns:optisigns-schedules-api
   name: OptiSigns Schedules API
   tags:
+  - Schedule
+  - Scheduling
+  tags_raw:
   - Schedules
   - Scheduling
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
