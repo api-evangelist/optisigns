@@ -1,4 +1,4 @@
-# OptiSigns (optisigns)
+# OptiSigns
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,93 +64,122 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-OptiSigns is a cloud digital signage platform that turns any TV or display into a digital sign using low-cost media players (Android, Amazon Fire TV, Raspberry Pi, ProDVX, and others). Screens, media assets, playlists, and schedules are managed centrally from the OptiSigns dashboard, and the same resources can be managed programmatically through the OptiSigns GraphQL API.
+OptiSigns is a cloud digital signage platform that turns any TV or display into a digital sign using low-cost media players (Android, Amazon Fire TV, Raspberry Pi, ProDVX, and others). Screens, media assets, playlists, and schedules are managed centrally from the OptiSigns dashboard. Developers manage the same resources programmatically through the OptiSigns GraphQL API, which is served from a single endpoint at https://graphql-gateway.optisigns.com/graphql and authenticated with a Bearer API key. API access is a paid capability available on the Pro Plus plan and higher; the API covers devices (screens), assets (content), playlists, schedules, and team management. Official TypeScript/JavaScript and Python SDKs plus an API cookbook are published on GitHub.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/optisigns/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/optisigns/refs/heads/main/apis.yml)
+**Areas:** Digital Signage · Screens · Content Management · GraphQL · Displays · Playlists
 
-## Access Model (Read This First)
+## OptiSigns on APIs.io
 
-The OptiSigns API is a **paid, self-serve capability** - not open, and not available on every plan.
+Everything profiled for OptiSigns is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/optisigns/](https://apis.io/providers/optisigns/)** — or go straight to one of the APIs or properties below.
 
-- **Protocol:** GraphQL only. There is a single endpoint at `https://graphql-gateway.optisigns.com/graphql`. OptiSigns does **not** publish a traditional REST API. A web-based GraphQL IDE is available at the same URL for exploring the schema.
-- **Authentication:** API key sent as an HTTP header, `Authorization: Bearer YOUR_KEY_HERE`. Keys are generated in the dashboard at `https://app.optisigns.com/generate-api-key` (also reachable from Account Settings).
-- **Plan requirement:** GraphQL API access is included on the **Pro Plus** plan ($15/screen/month, or $13.50 paid annually) and higher, including **Enterprise** ($45/screen/month, or $40.50 annually, minimum 25 screens). Lower tiers (Free, Standard, Pro) and their per-screen pricing do not include API access. Third-party pricing summaries sometimes describe API access as Enterprise-only; OptiSigns' own pricing page lists it from Pro Plus up. Confirm the current entitlement for your account on the [pricing page](https://www.optisigns.com/pricing) before building.
-- **No public WebSocket / realtime API.** The public surface is request/response GraphQL over HTTPS. See `review.yml`.
+### APIs (5)
 
-## APIs
+- [OptiSigns Devices API](https://apis.io/apis/optisigns/optisigns-devices-api/) — Query and manage the devices (screens) paired to an OptiSigns account. List devices, look them up by name or ID, create and update device settings, reboot a…
+- [OptiSigns Assets API](https://apis.io/apis/optisigns/optisigns-assets-api/) — Manage the content assets displayed on screens - upload file assets (images, video, documents), create website and app assets, modify asset settings, list…
+- [OptiSigns Playlists API](https://apis.io/apis/optisigns/optisigns-playlists-api/) — Create and manage playlists - ordered sequences of assets with per-item durations - and assign them to devices. Playlists are a documented OptiSigns…
+- [OptiSigns Schedules API](https://apis.io/apis/optisigns/optisigns-schedules-api/) — Create and manage schedules that control when assets and playlists play on which devices across dates, times, and recurrence. Schedules are a documented…
+- [OptiSigns Teams API](https://apis.io/apis/optisigns/optisigns-teams-api/) — Organize devices and assets into teams (sub-accounts) for multi-location and multi-tenant management. Teams are a documented OptiSigns resource type…
 
-Five logical APIs are modeled over the single GraphQL endpoint. Device and Asset operations are **confirmed** against the official OptiSigns Node SDK; Playlist, Schedule, and Team operations are documented resource types whose exact GraphQL fields are **honestly modeled** and flagged in the schema.
+### Published properties
 
-### OptiSigns Devices API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Query and manage the devices (screens) paired to an account: list, look up by name or ID, create, update, reboot, push content, and delete. Confirmed SDK methods: `listAllDevices`, `findByDeviceName`, `getDeviceById`, `createDevice`, `updateDevice`, `deleteDeviceById`, `rebootDevice`, `pushContentToDevice`.
+#### GraphQL (1)
 
-- **Human URL:** [https://docs.optisigns.com/quickstart](https://docs.optisigns.com/quickstart)
-- **Base URL:** `https://graphql-gateway.optisigns.com/graphql`
+GraphQL schemas.
 
-### OptiSigns Assets API
+- [OptiSigns GraphQL API](https://apis.io/graphqls/optisigns/optisigns-graphql/)
 
-Manage content assets shown on screens: upload file assets (images, video, documents), create website/app assets, modify settings, list and fetch by filename, and delete. Confirmed SDK methods: `uploadFileAsset`, `createWebsiteAppAsset`, `modifyAssetSettings`, `deleteAssetById`.
+#### Collections (1)
 
-- **Human URL:** [https://docs.optisigns.com/quickstart](https://docs.optisigns.com/quickstart)
-- **Base URL:** `https://graphql-gateway.optisigns.com/graphql`
+Postman and Open Collection request collections.
 
-### OptiSigns Playlists API
+- [OptiSigns GraphQL API](https://apis.io/collections/optisigns/open-optisigns/)
 
-Create and manage playlists - ordered sequences of assets with per-item durations - and assign them to devices. **Operations modeled** from the documented resource type.
+#### Security (3)
 
-- **Human URL:** [https://docs.optisigns.com/quickstart](https://docs.optisigns.com/quickstart)
-- **Base URL:** `https://graphql-gateway.optisigns.com/graphql`
+Authentication, trust centre, and vulnerability disclosure.
 
-### OptiSigns Schedules API
+- [Optisigns Domain Security](https://apis.io/security/optisigns/optisigns-domain-security/)
+- [Optisigns Trust Center](https://apis.io/security/optisigns/optisigns-trust-center/)
+- [Optisigns Vulnerability Disclosure](https://apis.io/security/optisigns/optisigns-vulnerability-disclosure/)
 
-Create and manage schedules that control when assets and playlists play on which devices across dates, times, and recurrence. **Operations modeled** from the documented resource type.
+#### Plans and pricing (1)
 
-- **Human URL:** [https://docs.optisigns.com/quickstart](https://docs.optisigns.com/quickstart)
-- **Base URL:** `https://graphql-gateway.optisigns.com/graphql`
+Published plans, tiers and prices.
 
-### OptiSigns Teams API
+- [Optisigns Plans Pricing](https://apis.io/plans/optisigns/optisigns-plans-pricing/)
 
-Organize devices and assets into teams (sub-accounts) for multi-location and multi-tenant management. **Operations modeled** from the documented resource type.
+#### Rate limits (1)
 
-- **Human URL:** [https://docs.optisigns.com/quickstart](https://docs.optisigns.com/quickstart)
-- **Base URL:** `https://graphql-gateway.optisigns.com/graphql`
+Published request limits.
 
-## Tags
+- [Optisigns Rate Limits](https://apis.io/rate-limits/optisigns/optisigns-rate-limits/)
 
-- Digital Signage
-- Screens
-- Content Management
-- GraphQL
-- Displays
-- Playlists
+#### FinOps (1)
 
-## Timestamps
+What the API costs to run, by operation.
 
-- **Created:** 2026-07-05
-- **Modified:** 2026-07-05
+- [Optisigns Finops](https://apis.io/finops/optisigns/optisigns-finops/)
 
-## Common Properties
+## Where to find this API
 
-- [GitHub Organization](https://github.com/optisigns)
-- [LinkedIn](https://www.linkedin.com/company/optisigns)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.optisigns.com)
 - [Documentation](https://docs.optisigns.com)
-- [Plans](plans/optisigns-plans-pricing.yml)
-- [Rate Limits](rate-limits/optisigns-rate-limits.yml)
-- [FinOps](finops/optisigns-finops.yml)
-- [SDK](https://github.com/optisigns/optisigns-node)
+- [Blog](https://www.optisigns.com/blog)
+- [GitHub](https://github.com/optisigns)
 
-## Sources
+## API Evangelist rating
 
-- Quickstart: [https://docs.optisigns.com/quickstart](https://docs.optisigns.com/quickstart)
-- API section (support): [https://support.optisigns.com/hc/en-us/sections/4414558217235-OptiSigns-API](https://support.optisigns.com/hc/en-us/sections/4414558217235-OptiSigns-API)
-- Generate & Manage API Key: [https://support.optisigns.com/hc/en-us/articles/4414563797139-Generate-Manage-OptiSigns-API-Key](https://support.optisigns.com/hc/en-us/articles/4414563797139-Generate-Manage-OptiSigns-API-Key)
-- Official Node SDK: [https://github.com/optisigns/optisigns-node](https://github.com/optisigns/optisigns-node)
-- API Cookbook: [https://github.com/optisigns/optisigns-api-cookbook](https://github.com/optisigns/optisigns-api-cookbook)
-- Pricing: [https://www.optisigns.com/pricing](https://www.optisigns.com/pricing)
+**Kin Score 18.0** — emerging · rubric 0.24.0 · scored 2026-10-17
 
-## Maintainers
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 0.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 30.5 |
+| Access clarity | 15.8 |
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Agent readiness 0.6** — human-only
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | — |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/optisigns/](https://apis.io/providers/optisigns/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for OptiSigns: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/optisigns/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
